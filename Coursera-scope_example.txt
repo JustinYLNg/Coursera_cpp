@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+extern int reps = 0;
+
+void f()
+{
+	static int called = 0;
+	printf("f called %d\n", called);
+	called++;
+	reps = reps + called;
+}
+
+int main()
+{
+	auto int i = 1;
+	const int Limit = 10;
+	for(i=1; i<Limit; i++){
+		printf("i local = %d, reps global = %d\n", i, reps);
+		f();
+	}
+	return 0;
+}
+
+// i = 1, reps = 0, called = 0 -→ called = 1, reps = 1
+// i = 2, reps = 1, called = 1 -→ called = 2, reps = 3
+// i = 3, reps = 3, called = 2 -→ called = 3, reps = 6
+// etc
