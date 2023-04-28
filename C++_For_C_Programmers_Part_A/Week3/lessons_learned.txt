@@ -1,0 +1,23 @@
+References used:
+1. https://www.geeksforgeeks.org/priority-queue-using-binary-heap/
+2. 
+
+Things that I learned:
+My old version oversimplified the mapping, thinking that I can associate the path cost with vector index
+directly. Upon going through the algorithm on paper, it is obviously incorrect. As when the
+priority queue is popped, the vector index no longer matches with the node. Hence, unordered map
+is added.
+
+This program assumed the graph has edges with non-negative costs and all edges are undirected. For
+representation of the graph, adjacency matrix is used. Because of these properties, the diagonal of
+the matrix is explicitly initialized to zero. The adjacency matrix was originally stored using pointers
+and new operators, but upon further research, I found that vectors are preferred instead in C++.
+
+As I do not have a solid background in programming, I had a difficult time to think algorithmically.
+And much research was done on the topic so that I would understand as thorough as possible, which
+helps me plan out the program. The instruction also helps to make sure I have the key class methods
+included in the program and make use of them.
+
+Result:
+For density 0.2, average path length is 6
+For density 0.4, average path length is 3
