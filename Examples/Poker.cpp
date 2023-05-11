@@ -2,19 +2,33 @@
 #include "Poker.hpp"
 
 #include <algorithm>
+#include <assert.h>
+#include <cstdlib>
 
 void Poker::initDeck(std::vector<Card>& deck)
 {
-    for(int i=1; i<14; i++)
+    for(suit s=(suit)0; s <= suit::SPADE; s = static_cast<suit>((size_t)s + 1))
     {
-        Card card_spade(suit::SPADE, i);
-        deck[i - 1] = card_spade;
-        Card card_heart(suit::HEART, i);
-        deck[i + 13 - 1] = card_heart;
-        Card card_diamond(suit::DIAMOND, i);
-        deck[i + 26 - 1] = card_diamond;
-        Card card_club(suit::CLUB, i);
-        deck[i + 39 - 1] = card_club;
+        for(int p=1; p<=13; p++)
+        {
+            Card c(s, p);
+            deck.push_back(c);
+        }
+    }
+}
+
+void Poker::shuffleDeck(std::vector<Card> &deck)
+{
+    for(int i=0; i<deck.size(); i++)
+    {
+        int random_index = rand()%(52-1);   //[0,51]
+        if(i!=random_index)
+        {
+            Card temp = deck[i];
+            deck[i] = deck[random_index];
+            deck[random_index] = temp;
+        }
+
     }
 }
 
@@ -36,6 +50,7 @@ bool Poker::isFlush(std::vector<Card> &hand)
 {
     //5 cards on hand are of the same suit, not necessarily sequential
     //pivot at first card
+    assert(hand.size() == 5);
     suit s = hand[0].get_suit();
 
     for (auto it = hand.begin() + 1; it != hand.end(); it++)
@@ -77,4 +92,23 @@ bool Poker::isStraight(std::vector<Card> &hand)
 bool Poker::isStraightFlush(std::vector<Card> &hand)
 {
     return isStraight(hand) && isFlush(hand);
+}
+
+bool Poker::is_N_Of_A_Kind(std::vector<Card>& hand, int n)
+{
+    //bucket count
+    int bins[13] = {0};
+    for(int i=0; i<hand.size(); i++)
+    {
+        int pip = (hand[i].get_pips()).get_pips();
+        bins[pip-1]++;
+    }
+    for(int i=0; i<13; i++)
+    {
+        if(bins[i] == n)
+        {
+            return true;
+        }
+    }
+    return false;
 }
